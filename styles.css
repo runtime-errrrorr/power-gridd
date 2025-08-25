@@ -1,0 +1,491 @@
+/* --- Base Layout & Theming --- */
+:root {
+  --bg: #0f1115;
+  --panel: #0b0d11;
+  --border: rgba(255, 255, 255, 0.06);
+  --text: #e6e7ea;
+  --muted: #9aa4b2;
+  --accent: #6bc1ff;
+  --ok: #4caf50;
+  --warn: #ffc107;
+  --err: #f44336;
+  --header-h: 56px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden; /* Prevent body from scrolling */
+}
+
+/* --- Side Panel --- */
+#sidePanel {
+  width: 350px;
+  flex-shrink: 0; /* Prevent panel from shrinking */
+  height: 100%;
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: hidden; /* prevent overlapping; we'll control children */
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  transition: transform 0.3s ease-in-out;
+}
+
+#sidePanel h2 {
+  margin: 0 0 10px 0;
+  font-size: 18px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+#sidePanel h3 {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+#poleInfo {
+  background: #111419;
+  padding: 10px;
+  border-radius: 10px;
+  min-height: 100px;
+  border: 1px solid var(--border);
+  flex-shrink: 0; /* keep fixed height; don't let it collapse */
+}
+
+#eventLog {
+  background: #111419;
+  padding: 8px;
+  font-size: 12px;
+  flex: 1 1 auto;       /* take remaining space */
+  overflow-y: auto;     /* scroll inside instead of overlapping */
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+/* --- Main Content Area (Header + Map) --- */
+#mainContent {
+  flex-grow: 1;         /* ✅ This makes it fill the remaining width */
+  min-width: 0;         /* ✅ This prevents content from causing overflow */
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;   /* Add this for absolute positioning context */
+}
+
+header {
+  height: var(--header-h);
+  flex-shrink: 0;      /* Prevent header from shrinking */
+  background: var(--panel);
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  z-index: 5;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#map {
+  width: 100%;        /* Fill the parent (#mainContent) horizontally */
+  flex-grow: 1;       /* ✅ This makes it fill the remaining vertical space */
+  z-index: 1;
+  border-bottom: 1px solid var(--border);
+}
+
+/* --- Analytics Block --- */
+.analytics-block {
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+  min-height: 200px;
+  max-height: 800px;
+  height: 300px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.analytics-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.analytics-header h3 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.analytics-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.analytics-controls select {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  min-width: 120px;
+  cursor: pointer;
+}
+
+.analytics-controls button {
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0;
+  width: auto;
+  min-width: 36px;
+  transition: all 0.2s ease;
+}
+
+.analytics-controls button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent);
+}
+
+.analytics-content {
+  flex: 1;
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  overflow: hidden;
+}
+
+.chart-container {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.chart-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: 100%;
+}
+
+/* --- Resize Handle --- */
+.resize-handle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: transparent;
+  cursor: ns-resize;
+  z-index: 10;
+}
+
+.resize-handle:hover {
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+.resize-handle:active {
+  background: var(--accent);
+  opacity: 1;
+}
+
+/* --- Controls & Buttons --- */
+button {
+  background: transparent;
+  color: var(--text);
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  margin-top: 12px;
+  cursor: pointer;
+  border-radius: 10px;
+  width: 100%;
+  font-weight: 600;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+#hamburger-btn {
+  display: none; /* Hidden by default on larger screens */
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 0;
+  width: auto;
+  margin-top: 0;
+}
+
+/* --- Leaflet & Status Colors --- */
+.leaflet-container {
+  background: var(--bg);
+}
+
+.leaflet-control-zoom a {
+  background: var(--panel) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.status-green { color: var(--ok); }
+.status-yellow { color: var(--warn); }
+.status-red { color: var(--err); }
+
+/* --- Responsive Design for smaller screens --- */
+@media (max-width: 768px) {
+  #sidePanel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+  }
+
+  #sidePanel.open {
+    transform: translateX(0);
+  }
+
+  #hamburger-btn {
+    display: block;
+  }
+  
+  .analytics-content {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .chart-container {
+    min-height: 200px;
+  }
+}
+
+/* Toast-style alert */
+.alert-banner {
+  position: fixed;
+  top: 20px;
+  right: -400px;
+  background: #f44336;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: right 0.5s ease-in-out, opacity 0.5s;
+  opacity: 0;
+  z-index: 2000;
+  display: none;
+}
+.alert-banner.show {
+  right: 20px;
+  opacity: 1;
+  display: block;
+}
+
+/* Substation marker icon */
+.triangle-marker {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 26px solid #4caf50; /* Green filled triangle */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;  /* thunder size */
+  color: #000;      /* thunder color (black for contrast) */
+  line-height: 0;
+}
+
+
+.triangle-marker {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 34px solid #4caf50; /* green fill */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.thunder-icon {
+  position: absolute;
+  top: 8px;    /* adjust vertical centering */
+  width: 16px; /* resize thunder */
+  height: auto;
+}
+
+/* Toast-style alert (if you already added these earlier, keep them) */
+.alert-banner {
+  position: fixed;
+  top: 20px;
+  right: -400px;
+  background: #f44336;
+  color: white;
+  padding: 15px 25px;
+  border-radius: 6px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: right 0.5s ease-in-out, opacity 0.5s;
+  opacity: 0;
+  z-index: 2000;
+  display: none;
+}
+.alert-banner.show { right: 20px; opacity: 1; display: block; }
+
+/* Substation marker (filled triangle + centered thunder SVG) */
+.substation-icon { display: flex; align-items: center; justify-content: center; }
+.triangle-marker {
+  position: relative;
+  width: 0; height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 34px solid #4caf50; /* this is the "fill" color we recolor via JS */
+}
+.triangle-marker .thunder-icon {
+  position: absolute;
+  left: 50%; transform: translateX(-50%);
+  top: 7px;          /* tweak for vertical centering */
+  width: 16px;       /* adjust thunder size as needed */
+  height: auto;
+  pointer-events: none;
+}
+
+/* ===================== FAULT COLORS ===================== */
+
+/* Neutral fault downstream */
+.pole-neutral {
+  fill: #ffc107 !important;
+  stroke: #ffc107 !important;
+}
+.line-neutral {
+  stroke: #ffc107 !important;
+  stroke-width: 4px;
+}
+
+/* Overvoltage: bright fast cyan surge */
+.overvoltage-line {
+  stroke: #00bfff !important;
+  stroke-width: 5px;
+  opacity: 0.95;
+  animation: surgeFast 0.6s linear infinite;
+}
+.overvoltage-pole {
+  stroke: #00bfff !important;
+  fill: #4caf50 !important; /* keep green fill */
+  animation: surgePulse 0.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px #00bfff);
+}
+
+/* Undervoltage: dim slow blue surge */
+.undervoltage-line {
+  stroke: #1e90ff !important;
+  stroke-width: 4px;
+  opacity: 0.7;
+  animation: surgeSlow 2.5s linear infinite;
+}
+.undervoltage-pole {
+  stroke: #1e90ff !important;
+  fill: #4caf50 !important; /* keep green fill */
+  animation: surgeDim 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px #1e90ff);
+}
+
+/* ===================== ANIMATIONS ===================== */
+
+/* Fast bright flow (Overvoltage) */
+/* Fast bright flow (Overvoltage) */
+@keyframes surgeFast {
+  0%   { stroke-dasharray: 12, 8; stroke-dashoffset: 0; }
+  100% { stroke-dasharray: 12, 8; stroke-dashoffset: 20; }  /* positive offset */
+}
+
+/* Slow dim flow (Undervoltage) */
+@keyframes surgeSlow {
+  0%   { stroke-dasharray: 6, 14; stroke-dashoffset: 0; }
+  100% { stroke-dasharray: 6, 14; stroke-dashoffset: 20; }  /* positive offset */
+}
+
+/* Pulsing glow (Overvoltage poles) */
+@keyframes surgePulse {
+  0%, 100% { filter: drop-shadow(0 0 10px #00bfff); }
+  50%      { filter: drop-shadow(0 0 30px #00bfff); }
+}
+
+/* Dim pulse (Undervoltage poles) */
+@keyframes surgeDim {
+  0%, 100% { filter: drop-shadow(0 0 4px #1e90ff); opacity: 0.6; }
+  50%      { filter: drop-shadow(0 0 15px #1e90ff); opacity: 0.9; }
+}
+
+/* ===================== SUBSTATION ===================== */
+
+/* Triangle base for substation */
+/* .triangle-marker {
+  width: 0;
+  height: 0;
+  border-left: 22px solid transparent;
+  border-right: 22px solid transparent;
+  border-bottom: 38px solid #4caf50; 
+  position: relative;
+}
+
+.triangle-marker .thunder-icon {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20px;
+  height: 20px;
+} */
