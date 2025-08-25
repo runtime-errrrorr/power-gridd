@@ -176,8 +176,8 @@ export class FaultManager {
     });
 
     const eventLogEl = document.getElementById('eventLog');
-    logEvent(eventLogEl, `Neutral Break at Pole ${poleId}`, "warn");
-    showAlert(`⚠️ Neutral Break at Pole ${poleId}`);
+    logEvent(eventLogEl, `Line Break Fault at Pole ${poleId}`, "warn");
+    showAlert(`⚠️ Line Break Fault at Pole ${poleId}`);
     updateSystemStatus("WARNING");
   }
 
